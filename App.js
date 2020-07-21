@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { Text, View, Platform } from 'react-native'
-import { NavigationContainer } from '@react-navigation/native'
+import { StatusBar, View, Platform } from 'react-native'
+import { NavigationContainer, createStackNavigator } from '@react-navigation/native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -11,6 +11,34 @@ import { purple, white } from './utils/colors'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import reducer from './reducers'
+import { Constants } from 'expo'
+import EntryDetail from './components/EntryDetail'
+
+function UdaciStatusBar({backgroundColor, ...props}) {
+  return (
+    <View style={{backgroundColor, height: Constants.statusBarHeight}}>
+      <StatusBar translucent backgroundColor={backgroundColor} {...props} />
+    </View>
+  )
+}
+
+const MainNavigator = createStackNavigator({
+  home: {
+    screen: Tabs,
+    navigationOptions: {
+      header: null,
+    },
+  },
+  EntryDetail: {
+    screen: EntryDetail,
+    navigationOptions: ({ navigation }) => ({
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: purple,
+      },
+    }),
+  },
+});
 
 const Tab = Platform.OS === 'ios' ? createBottomTabNavigator() : createMaterialTopTabNavigator()
 
@@ -18,8 +46,11 @@ export default function App() {
   return (
     <Provider store={createStore(reducer)}>
         <View style={{flex:1}}>
-          <View style={{height: 20}} />
-            <NavigationContainer>
+          <UdaciStatusBar backgroundColor={purple} barStyle='light-content'/>
+            
+            <MainNavigator />
+
+            {/**<NavigationContainer>
               <Tab.Navigator
                 barStyle={{ backgroundColor: purple }}
                 tabBarOptions={{
@@ -55,7 +86,7 @@ export default function App() {
                 <Tab.Screen name="History" component={History} />
                 <Tab.Screen name="AddEntry" component={AddEntry} />
               </Tab.Navigator>
-            </NavigationContainer>
+            </NavigationContainer>**/}
            </View>
         </Provider>
   )

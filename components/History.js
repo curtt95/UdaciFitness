@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { receiveEntries, addEntry } from '../actions'
 import { timeToString, getDailyReminderValue } from '../utils/helpers'
 import { fetchCalendarResults } from '../utils/api'
-import UdaciFitnessCalendar from 'udacifitness-calendar-fix'
+import {Agenda as UdaciFitnessCalendar } from 'react-native-calendars'
 import DateHeader from './DateHeader'
 import { white } from '../utils/colors'
 import MetricCard from './MetricCard'
@@ -53,7 +53,6 @@ class History extends Component {
     renderEmptyDate(formattedDate) {
         return (
             <View style={styles.item}>
-                <DateHeader date={formattedDate} />
                 <Text style={styles.noDataText}>
                     You didn't log any data on this day.
                 </Text>
@@ -86,7 +85,7 @@ const styles = StyleSheet.create({
         padding: 20,
         marginLeft: 10,
         marginRight: 10,
-        marginTop: 17,
+        marginTop: 10,
         justifyContent: 'center',
         shadowRadius: 3,
         shadowOpacity: 0.8,
