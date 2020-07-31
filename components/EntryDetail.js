@@ -3,7 +3,10 @@ import {StyleSheet, View} from 'react-native'
 import {connect} from 'react-redux';
 import MetricCard from "./MetricCard";
 import {white} from "../utils/colors";
-import { addEntry }
+import {addEntry} from "../actions";
+import {getDailyReminderValue, timeToString} from "../utils/helpers";
+import {removeEntry} from "../utils/api";
+import TextButton from "./TextButton";
 
 class EntryDetail extends Component {
 
@@ -19,12 +22,24 @@ class EntryDetail extends Component {
         });
     };
 
+    reset = () => {
+        const {remove, goBack, entryId} = this.props;
+        remove();
+        goBack();
+        removeEntry(entryId);
+    }
+
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        return nextProps.metrics && !nextProps.metrics.today;
+    }
+
     render() {
         const {entryId, metrics} = this.props;
         this.setTitle(entryId);
         return (
             <View style={styles.container}>
                 <MetricCard metrics={metrics} date={entryId}/>
+                <TextButton onPress={this.reset} style={{margin: 20}}>Reset</TextButton>
             </View>
         )
     }
@@ -49,4 +64,16 @@ function mapStateToProps(state, {route}) {
     )
 }
 
-export default connect(mapStateToProps)(EntryDetail);
+function mapDispatchToProps(dispatch, {route, navigation}) {
+    const {entryId} = route.params;
+    return {
+        remove: () => dispatch(addEntry({
+            [entryId]: timeToString() === entryId
+                ? getDailyReminderValue()
+                : null
+        })),
+        goBack: () => navigation.goBack()
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EntryDetail);
