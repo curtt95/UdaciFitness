@@ -22,9 +22,7 @@ function SubmitBtn({onPress}) {
     )
 }
 
-
 class AddEntry extends Component {
-
     state = {
         run: 0,
         bike: 0,
@@ -32,7 +30,6 @@ class AddEntry extends Component {
         sleep: 0,
         eat: 0,
     }
-
 
     increment = (metric) => {
         const {max, step} = getMetricMetaInfo(metric);
@@ -107,9 +104,7 @@ class AddEntry extends Component {
     }
 
     render() {
-
         const metaInfo = getMetricMetaInfo();
-
 
         if (this.props.alreadyLogged) {
             return (
@@ -206,4 +201,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(AddEntry);
+export default connect(mapStateToProps)(AddEntry)
